@@ -24,3 +24,16 @@ docker run -d \
     --network=network1 \
     postgres:14
 ```
+
+Database
+```
+bin/rails g model user email:string name:string
+bin/rails db:migrate
+bin/rails db:rollback step=1
+```
+
+User
+```
+bin/rails g model user email:string name:string
+bin/rails g controller users show create
+```
