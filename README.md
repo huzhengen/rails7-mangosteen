@@ -67,3 +67,30 @@ bin/rails generate rspec:request items
 bin/rails generate rspec:request validation_codes
 bundle exec rspec
 ```
+
+key
+```
+rm config/credentials.yml.enc
+EDITOR="code --wait" rails credentials:edit
+EDITOR="code --wait" rails credentials:edit --environment production
+```
+
+Linux
+```
+sudo adduser mangosteen
+apt-get update
+usermod -a -G docker mangosteen
+mkdir /home/mangosteen/.ssh
+cp ~/.ssh/authorized_keys /home/mangosteen/.ssh
+chown -R mangosteen:mangosteen /home/mangosteen/.ssh/
+chmod +x bin/pack_for_remote.sh bin/setup_remote.sh
+```
+
+docker
+```
+docker ps -a
+docker stop xxx && docker rm xxx
+docker image ls
+docker image rm xxx
+docker logs xxx
+```
