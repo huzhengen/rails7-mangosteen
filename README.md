@@ -10,6 +10,7 @@ cd ~/repos
 rails new --api --database=postgresql --skip-test mangosteen-1
 code mangosteen-1
 bundle exe rails server
+bundle --verbose
 ```
 
 Start postgres in docker
@@ -36,4 +37,21 @@ User
 ```
 bin/rails g model user email:string name:string
 bin/rails g controller users show create
+```
+
+ValidationCode
+```
+bin/rails g model ValidationCode email:string kind:string used_at:datetime
+bin/rails g controller Api::V1::ValidationCodes
+```
+
+Items
+```
+bin/rails g model item
+bin/rails g controller Api::V1::Items
+```
+
+kaminari
+```
+bin/rails g kaminari:config
 ```
