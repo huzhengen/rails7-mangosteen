@@ -31,6 +31,7 @@ Database
 bin/rails g model user email:string name:string
 bin/rails db:migrate
 bin/rails db:rollback step=1
+RAILS_ENV=test bin/rails db:create db:migrate
 ```
 
 User
@@ -54,4 +55,11 @@ bin/rails g controller Api::V1::Items
 kaminari
 ```
 bin/rails g kaminari:config
+```
+
+RSpec
+```
+bin/rails generate rspec:install
+bin/rails generate rspec:model user
+bundle exec rspec
 ```
