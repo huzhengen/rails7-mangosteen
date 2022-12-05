@@ -44,12 +44,14 @@ ValidationCode
 ```
 bin/rails g model ValidationCode email:string kind:string used_at:datetime
 bin/rails g controller Api::V1::ValidationCodes
+bin/rails generate rspec:request validation_codes
 ```
 
 Items
 ```
 bin/rails g model item
 bin/rails g controller Api::V1::Items
+bin/rails generate rspec:request items
 ```
 
 kaminari
@@ -62,5 +64,6 @@ RSpec
 bin/rails generate rspec:install
 bin/rails generate rspec:model user
 bin/rails generate rspec:request items
+bin/rails generate rspec:request validation_codes
 bundle exec rspec
 ```
