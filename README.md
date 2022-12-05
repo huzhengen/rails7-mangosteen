@@ -61,5 +61,6 @@ RSpec
 ```
 bin/rails generate rspec:install
 bin/rails generate rspec:model user
+bin/rails generate rspec:request items
 bundle exec rspec
 ```
