@@ -84,12 +84,14 @@ mkdir /home/mangosteen/.ssh
 cp ~/.ssh/authorized_keys /home/mangosteen/.ssh
 chown -R mangosteen:mangosteen /home/mangosteen/.ssh/
 chmod +x bin/pack_for_remote.sh bin/setup_remote.sh
+cp -r /workspaces/oh-my-env-1/temp/xxx vendor
 ```
 
 docker
 ```
 docker ps -a
 docker stop xxx && docker rm xxx
+docker rm -f xxx
 docker image ls
 docker image rm xxx
 docker logs xxx
@@ -107,4 +109,14 @@ Git
 git rm -r --cached dist
 git add .
 git commit --amend -m "update"
+```
+
+rspec_api_documentation
+```
+mkdir spec/acceptance
+vim spec/acceptance/orders_spec.rb
+code spec/acceptance/orders_spec.rb
+bin/rake docs:generate
+open doc/api/index.html
+pnpx http-server doc/api/
 ```
