@@ -94,3 +94,17 @@ docker image ls
 docker image rm xxx
 docker logs xxx
 ```
+
+Mailer
+```
+bin/rails generate mailer User
+bin/rails c
+UserMailer.welcome_email("123456", "xxx@xxx.com").deliver
+```
+
+Git
+```
+git rm -r --cached dist
+git add .
+git commit --amend -m "update"
+```
