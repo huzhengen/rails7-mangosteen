@@ -109,23 +109,45 @@ table th, table td {
       <h1>Validation_codes API</h1>
 
       <div class="article">
-        <h2>Request code</h2>
+        <h2>Request Code</h2>
         <h3>POST /api/v1/validation_codes</h3>
 
+          <h3>Parameters</h3>
+          <table class="parameters table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                    <span class="name">email</span>
+                </td>
+                <td>
+                  <span class="description">Email</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
 
           <h3>Request</h3>
 
             <h4>Headers</h4>
             <pre class="request headers">Version: HTTP/1.0
+Accept: application/json
+Content-Type: application/json
 Host: example.org
-Content-Type: application/x-www-form-urlencoded
 Cookie: </pre>
 
           <h4>Route</h4>
           <pre class="request route highlight">POST /api/v1/validation_codes</pre>
 
 
+            <h4>Body</h4>
+            <pre class="request body">{"email":"1@gmail.com"}</pre>
 
 
             <h3>Response</h3>
@@ -136,21 +158,17 @@ X-Content-Type-Options: nosniff
 X-Download-Options: noopen
 X-Permitted-Cross-Domain-Policies: none
 Referrer-Policy: strict-origin-when-cross-origin
-Content-Type: application/json; charset=utf-8
-Cache-Control: no-cache
-X-Request-Id: 085e8a25-5e20-4e07-8ee7-96abdbc47cd6
-X-Runtime: 0.067924
-Content-Length: 39</pre>
+Content-Type: text/plain; charset=utf-8
+Vary: Accept
+ETag: W/&quot;36a9e7f1c95b82ffb99743e0c5c4ce95&quot;
+Cache-Control: max-age=0, private, must-revalidate
+X-Request-Id: 0d95be37-55f0-474f-88aa-3252c4c039b3
+X-Runtime: 0.090441
+Content-Length: 1</pre>
             <h4>Status</h4>
-            <pre class="response status">400 Bad Request</pre>
+            <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{
-  &quot;errors&quot;: {
-    &quot;email&quot;: [
-      &quot;can&#39;t be blank&quot;
-    ]
-  }
-}</pre>
+              <pre class="response body"> </pre>
       </div>
     </div>
   </body>
