@@ -32,6 +32,9 @@ bin/rails g model user email:string name:string
 bin/rails db:migrate
 bin/rails db:rollback step=1
 RAILS_ENV=test bin/rails db:create db:migrate
+
+ValidationCode.destroy_all
+ValidationCode.count
 ```
 
 User
