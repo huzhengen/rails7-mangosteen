@@ -62,6 +62,11 @@ Sessions
 bin/rails g controller api/v1/sessions
 ```
 
+Me
+```
+bin/rails g controller api/v1/mes
+```
+
 kaminari
 ```
 bin/rails g kaminari:config
