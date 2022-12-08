@@ -57,6 +57,11 @@ bin/rails g controller Api::V1::Items
 bin/rails generate rspec:request items
 ```
 
+Sessions
+```
+bin/rails g controller api/v1/sessions
+```
+
 kaminari
 ```
 bin/rails g kaminari:config
