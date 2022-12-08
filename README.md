@@ -133,3 +133,8 @@ bin/rake docs:generate
 open doc/api/index.html
 pnpx http-server doc/api/
 ```
+
+middleware
+```
+bin/rails middleware
+```
