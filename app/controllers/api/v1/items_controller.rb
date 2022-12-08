@@ -2,10 +2,10 @@ class Api::V1::ItemsController < ApplicationController
   def index
     # items = Item.where("id > ?", params[:start_id]).limit(100)
     items = Item.where({ created_at: params[:created_after]..params[:created_before] })
-      .page(params[:page] || 1).per(10)
+      .page(params[:page] || 1)
     render json: { resources: items, pager: {
       page: params[:page] || 1,
-      per_page: 10,
+      per_page: Item.default_per_page,
       count: Item.count,
     } }
   end
