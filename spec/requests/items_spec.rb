@@ -2,14 +2,22 @@ require "rails_helper"
 
 RSpec.describe "Items", type: :request do
   describe "Get items" do
+    it "not logged in" do
+      user1 = User.create! email: "1@gmail.com"
+      11.times do
+        Item.create! amount: 100, user_id: user1.id
+      end
+      get "/api/v1/items"
+      expect(response).to have_http_status(401)
+    end
     it "pagination" do
       user1 = User.create! email: "1@gmail.com"
       user2 = User.create! email: "2@gmail.com"
       11.times do
-        Item.create! amount: 100, user_id: user1
+        Item.create! amount: 100, user_id: user1.id
       end
       11.times do
-        Item.create! amount: 100, user_id: user2
+        Item.create! amount: 100, user_id: user2.id
       end
       post "/api/v1/session", params: { email: user1.email, code: "123456" }
       json = JSON.parse response.body
