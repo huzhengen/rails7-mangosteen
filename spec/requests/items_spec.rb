@@ -3,15 +3,22 @@ require "rails_helper"
 RSpec.describe "Items", type: :request do
   describe "Get items" do
     it "pagination" do
+      user1 = User.create! email: "1@gmail.com"
+      user2 = User.create! email: "2@gmail.com"
       11.times do
-        Item.create! amount: 100
+        Item.create! amount: 100, user_id: user1
       end
-      expect(Item.count).to eq(11)
-      get "/api/v1/items"
+      11.times do
+        Item.create! amount: 100, user_id: user2
+      end
+      post "/api/v1/session", params: { email: user1.email, code: "123456" }
+      json = JSON.parse response.body
+      jwt = json["jwt"]
+      get "/api/v1/items", headers: { 'Authorization': "Bearer #{jwt}" }
       expect(response).to have_http_status(200)
       json = JSON.parse(response.body)
       expect(json["resources"].size).to eq 10
-      get "/api/v1/items?page=2"
+      get "/api/v1/items?page=2", headers: { 'Authorization': "Bearer #{jwt}" }
       expect(response).to have_http_status(200)
       json = JSON.parse(response.body)
       expect(json["resources"].size).to eq 1
