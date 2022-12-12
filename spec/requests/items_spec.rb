@@ -19,23 +19,21 @@ RSpec.describe "Items", type: :request do
       11.times do
         Item.create! amount: 100, user_id: user2.id
       end
-      post "/api/v1/session", params: { email: user1.email, code: "123456" }
-      json = JSON.parse response.body
-      jwt = json["jwt"]
-      get "/api/v1/items", headers: { 'Authorization': "Bearer #{jwt}" }
+      get "/api/v1/items", headers: user1.generate_auth_header
       expect(response).to have_http_status(200)
       json = JSON.parse(response.body)
       expect(json["resources"].size).to eq 10
-      get "/api/v1/items?page=2", headers: { 'Authorization': "Bearer #{jwt}" }
+      get "/api/v1/items?page=2", headers: user1.generate_auth_header
       expect(response).to have_http_status(200)
       json = JSON.parse(response.body)
       expect(json["resources"].size).to eq 1
     end
     it "filter by time" do
-      item1 = Item.create amount: 100, created_at: "2018-01-02"
-      item2 = Item.create amount: 100, created_at: "2018-01-02"
-      item3 = Item.create amount: 100, created_at: "2019-01-01"
-      get "/api/v1/items?created_after=2018-01-01&created_before=2018-01-03"
+      user1 = User.create! email: "1@gmail.com"
+      item1 = Item.create amount: 100, created_at: "2018-01-02", user_id: user1.id
+      item2 = Item.create amount: 100, created_at: "2018-01-02", user_id: user1.id
+      item3 = Item.create amount: 100, created_at: "2019-01-01", user_id: user1.id
+      get "/api/v1/items?created_after=2018-01-01&created_before=2018-01-03", headers: user1.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json["resources"].size).to eq 2
@@ -43,26 +41,29 @@ RSpec.describe "Items", type: :request do
       expect(json["resources"][1]["id"]).to eq item2.id
     end
     it "filter by time(boundary conditions)" do
-      item1 = Item.create amount: 100, created_at: "2018-01-01"
-      get "/api/v1/items?created_after=2018-01-01&created_before=2018-01-02"
+      user1 = User.create! email: "1@gmail.com"
+      item1 = Item.create amount: 100, created_at: "2018-01-01", user_id: user1.id
+      get "/api/v1/items?created_after=2018-01-01&created_before=2018-01-02", headers: user1.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json["resources"].size).to eq 1
       expect(json["resources"][0]["id"]).to eq item1.id
     end
     it "filter by time(boundary conditions 2)" do
-      item1 = Item.create amount: 100, created_at: "2018-01-01"
-      item2 = Item.create amount: 100, created_at: "2017-01-01"
-      get "/api/v1/items?created_after=2018-01-01"
+      user1 = User.create! email: "1@gmail.com"
+      item1 = Item.create amount: 100, created_at: "2018-01-01", user_id: user1.id
+      item2 = Item.create amount: 100, created_at: "2017-01-01", user_id: user1.id
+      get "/api/v1/items?created_after=2018-01-01", headers: user1.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json["resources"].size).to eq 1
       expect(json["resources"][0]["id"]).to eq item1.id
     end
     it "filter by time(boundary conditions 3)" do
-      item1 = Item.create amount: 100, created_at: "2018-01-01"
-      item2 = Item.create amount: 100, created_at: "2019-01-01"
-      get "/api/v1/items?created_before=2018-01-02"
+      user1 = User.create! email: "1@gmail.com"
+      item1 = Item.create amount: 100, created_at: "2018-01-01", user_id: user1.id
+      item2 = Item.create amount: 100, created_at: "2019-01-01", user_id: user1.id
+      get "/api/v1/items?created_before=2018-01-02", headers: user1.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json["resources"].size).to eq 1

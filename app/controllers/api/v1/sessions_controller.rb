@@ -10,9 +10,7 @@ class Api::V1::SessionsController < ApplicationController
     if user.nil?
       render status: 404, json: { errors: "User dose not exist." } # :not_found
     else
-      payload = { user_id: user.id }
-      token = JWT.encode payload, Rails.application.credentials.hmac_secret, "HS256"
-      render status: 200, json: { jwt: token } # :ok
+      render status: 200, json: { jwt: user.generate_jwt } # :ok
     end
   end
 end
