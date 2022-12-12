@@ -114,6 +114,7 @@ docker rm -f xxx
 docker image ls
 docker image rm xxx
 docker logs xxx
+docker system prune
 ```
 
 Mailer
