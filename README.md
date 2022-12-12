@@ -55,6 +55,7 @@ Items
 bin/rails g model item
 bin/rails g controller Api::V1::Items
 bin/rails generate rspec:request items
+bin/rails g migration AddKindToItem
 ```
 
 Tags
