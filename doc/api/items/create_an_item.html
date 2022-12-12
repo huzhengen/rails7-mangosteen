@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Sessions API</title>
+    <title>Items API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,11 +106,11 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>Sessions API</h1>
+      <h1>Items API</h1>
 
       <div class="article">
-        <h2>Sign in</h2>
-        <h3>POST /api/v1/session</h3>
+        <h2>Create an item</h2>
+        <h3>POST /api/v1/items</h3>
 
           <h3>Parameters</h3>
           <table class="parameters table table-striped table-bordered table-condensed">
@@ -123,18 +123,34 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">email</span>
+                    <span class="name">amount</span>
                 </td>
                 <td>
-                  <span class="description">Email</span>
+                  <span class="description">Amount</span>
                 </td>
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">code</span>
+                    <span class="name">tags_id</span>
                 </td>
                 <td>
-                  <span class="description">Code</span>
+                  <span class="description">Tag ids</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">happen_at</span>
+                </td>
+                <td>
+                  <span class="description">Happen time</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">kind</span>
+                </td>
+                <td>
+                  <span class="description">Kind</span>
                 </td>
               </tr>
             </tbody>
@@ -151,10 +167,42 @@ table th, table td {
             <tbody>
               <tr>
                 <td>
-                    <span class="name">jwt</span>
+                    <span class="name">resources[id]</span>
                 </td>
                 <td>
-                  <span class="description">Token for authenticating the user</span>
+                  <span class="description">ID</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">resources[amount]</span>
+                </td>
+                <td>
+                  <span class="description">Amount(cent)</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">resources[tags_id]</span>
+                </td>
+                <td>
+                  <span class="description">Tag ids</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">resources[happen_at]</span>
+                </td>
+                <td>
+                  <span class="description">Happen time</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">resources[kind]</span>
+                </td>
+                <td>
+                  <span class="description">Kind</span>
                 </td>
               </tr>
             </tbody>
@@ -164,17 +212,18 @@ table th, table td {
 
             <h4>Headers</h4>
             <pre class="request headers">Version: HTTP/1.0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMzAsImV4cCI6MTY3MDg2MDk1MH0.dRiLFB1ZavlbyrypTFSs6wfllNuIWHp0ac-3-Wi4Ve4
 Accept: application/json
 Content-Type: application/json
 Host: example.org
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/session</pre>
+          <pre class="request route highlight">POST /api/v1/items</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"email":"1@gmail.com","code":"123456"}</pre>
+            <pre class="request body">{"amount":100,"tags_id":[248,249],"happen_at":"2018-01-01T00:00:00+08:00","kind":"expenses"}</pre>
 
 
             <h3>Response</h3>
@@ -187,16 +236,29 @@ X-Permitted-Cross-Domain-Policies: none
 Referrer-Policy: strict-origin-when-cross-origin
 Content-Type: application/json; charset=utf-8
 Vary: Accept
-ETag: W/&quot;c239860363675df4727bac0a31a6dd79&quot;
+ETag: W/&quot;68f3209bbf2e5da8b57477e8ff58f0e7&quot;
 Cache-Control: max-age=0, private, must-revalidate
-X-Request-Id: e214ee26-109d-405b-bd74-486cedd641a3
-X-Runtime: 0.012534
-Content-Length: 118</pre>
+X-Request-Id: c14d0f99-b635-4e9e-bc03-59834e31e68b
+X-Runtime: 0.007610
+Content-Length: 219</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;jwt&quot;: &quot;eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMzEsImV4cCI6MTY3MDg2MDk1MH0.RpC5lLWGUTMj1pW_aZr-AiwxbY-juOTDXgQkLMJNRo8&quot;
+  &quot;resource&quot;: {
+    &quot;id&quot;: 192,
+    &quot;user_id&quot;: 130,
+    &quot;amount&quot;: 100,
+    &quot;note&quot;: null,
+    &quot;tags_id&quot;: [
+      248,
+      249
+    ],
+    &quot;happen_at&quot;: &quot;2017-12-31T16:00:00.000Z&quot;,
+    &quot;created_at&quot;: &quot;2022-12-12T14:02:30.062Z&quot;,
+    &quot;updated_at&quot;: &quot;2022-12-12T14:02:30.062Z&quot;,
+    &quot;kind&quot;: &quot;expenses&quot;
+  }
 }</pre>
       </div>
     </div>
