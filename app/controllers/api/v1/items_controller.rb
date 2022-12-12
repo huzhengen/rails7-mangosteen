@@ -16,7 +16,7 @@ class Api::V1::ItemsController < ApplicationController
     current_user_id = request.env["current_user_id"]
     return head 401 if current_user_id.nil? # :unauthorized
     # item = Item.new amount: params[:amount], tags_id: params[:tags_id], happen_at: params[:happen_at], user_id: current_user_id
-    item = Item.new params.permit(:amount, :tags_id, :happen_at)
+    item = Item.new params.permit(:amount, :happen_at, tags_id: [])
     item.user_id = current_user_id
     if item.save
       render json: { resource: item }
