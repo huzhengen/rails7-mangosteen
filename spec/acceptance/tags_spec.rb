@@ -70,11 +70,29 @@ resource "Tags" do
   end
 
   delete "/api/v1/tags/:id" do
-    let (:tag) { Tag.create name: "x", sign: "x", user_id: current_user.id }
-    let (:id) { tag.id }
+    let(:tag) { Tag.create name: "x", sign: "x", user_id: current_user.id }
+    let(:id) { tag.id }
     example "Delete tag" do
       do_request
       expect(status).to eq 200
+    end
+  end
+
+  get "/api/v1/tags/:id" do
+    let(:tag) { Tag.create name: "x", sign: "x", user_id: current_user.id }
+    let(:id) { tag.id }
+    with_options :scope => :resources do
+      response_field :id, "ID"
+      response_field :user_id, "User id"
+      response_field :name, "Name"
+      response_field :sign, "Sing"
+      response_field :deleted_time, "Delete time"
+    end
+    example "get one tag" do
+      do_request
+      expect(status).to eq 200
+      json = JSON.parse response_body
+      expect(json["resource"]["id"]).to eq tag.id
     end
   end
 end
