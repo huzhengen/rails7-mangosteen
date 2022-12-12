@@ -57,6 +57,11 @@ bin/rails g controller Api::V1::Items
 bin/rails generate rspec:request items
 ```
 
+Tags
+```
+bin/rails g model tag user:references name:string sign:string deleted_at:datetime
+```
+
 Sessions
 ```
 bin/rails g controller api/v1/sessions
