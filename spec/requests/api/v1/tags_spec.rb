@@ -57,4 +57,31 @@ RSpec.describe "Tags", type: :request do
       expect(json["errors"]["sign"][0]).to eq "can't be blank"
     end
   end
+
+  describe "update tag" do
+    it "not logged in" do
+      user1 = User.create! email: "1@gmail.com"
+      tag = Tag.create! name: "x", sign: "x", user_id: user1.id
+      patch "/api/v1/tags/#{tag.id}", params: { name: "y", sign: "y" }
+      expect(response).to have_http_status(401)
+    end
+    it "update tag" do
+      user1 = User.create! email: "1@gmail.com"
+      tag = Tag.create! name: "x", sign: "x", user_id: user1.id
+      patch "/api/v1/tags/#{tag.id}", params: { name: "y", sign: "y" }, headers: user1.generate_auth_header
+      expect(response).to have_http_status(200)
+      json = JSON.parse(response.body)
+      expect(json["resource"]["name"]).to eq "y"
+      expect(json["resource"]["sign"]).to eq "y"
+    end
+    it "update name of tag only" do
+      user1 = User.create! email: "1@gmail.com"
+      tag = Tag.create! name: "x", sign: "x", user_id: user1.id
+      patch "/api/v1/tags/#{tag.id}", params: { name: "y" }, headers: user1.generate_auth_header
+      expect(response).to have_http_status(200)
+      json = JSON.parse(response.body)
+      expect(json["resource"]["name"]).to eq "y"
+      expect(json["resource"]["sign"]).to eq "x"
+    end
+  end
 end
