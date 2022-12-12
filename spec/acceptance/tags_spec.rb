@@ -88,7 +88,7 @@ resource "Tags" do
       response_field :sign, "Sing"
       response_field :deleted_time, "Delete time"
     end
-    example "get one tag" do
+    example "Get one tag" do
       do_request
       expect(status).to eq 200
       json = JSON.parse response_body

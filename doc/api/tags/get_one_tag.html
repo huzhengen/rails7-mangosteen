@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Validation_codes API</title>
+    <title>Tags API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,14 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>Validation_codes API</h1>
+      <h1>Tags API</h1>
 
       <div class="article">
-        <h2>Request Code</h2>
-        <h3>POST /api/v1/validation_codes</h3>
+        <h2>Get one tag</h2>
+        <h3>GET /api/v1/tags/:id</h3>
 
-          <h3>Parameters</h3>
-          <table class="parameters table table-striped table-bordered table-condensed">
+
+          <h3>Response Fields</h3>
+          <table class="response-fields table table-striped table-bordered table-condensed">
             <thead>
               <tr>
                 <th>Name</th>
@@ -123,31 +124,61 @@ table th, table td {
             <tbody>
               <tr>
                 <td>
-                    <span class="name">email</span>
+                    <span class="name">resources[id]</span>
                 </td>
                 <td>
-                  <span class="description">Email</span>
+                  <span class="description">ID</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">resources[user_id]</span>
+                </td>
+                <td>
+                  <span class="description">User id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">resources[name]</span>
+                </td>
+                <td>
+                  <span class="description">Name</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">resources[sign]</span>
+                </td>
+                <td>
+                  <span class="description">Sing</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">resources[deleted_time]</span>
+                </td>
+                <td>
+                  <span class="description">Delete time</span>
                 </td>
               </tr>
             </tbody>
           </table>
 
-
           <h3>Request</h3>
 
             <h4>Headers</h4>
             <pre class="request headers">Version: HTTP/1.0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyMDQsImV4cCI6MTY3MDg1NTUzMn0.VumojzPI90g0GozGYy137QCIKqoN6MRvPZ1B-Kjnrqc
 Accept: application/json
 Content-Type: application/json
 Host: example.org
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/validation_codes</pre>
+          <pre class="request route highlight">GET /api/v1/tags/534</pre>
 
 
-            <h4>Body</h4>
-            <pre class="request body">{"email":"1@gmail.com"}</pre>
 
 
             <h3>Response</h3>
@@ -158,17 +189,27 @@ X-Content-Type-Options: nosniff
 X-Download-Options: noopen
 X-Permitted-Cross-Domain-Policies: none
 Referrer-Policy: strict-origin-when-cross-origin
-Content-Type: text/plain; charset=utf-8
+Content-Type: application/json; charset=utf-8
 Vary: Accept
-ETag: W/&quot;36a9e7f1c95b82ffb99743e0c5c4ce95&quot;
+ETag: W/&quot;e13dc3a61b0fb68759be4d9bd26f7f6c&quot;
 Cache-Control: max-age=0, private, must-revalidate
-X-Request-Id: 8b729563-ff3b-415c-bfa0-374245556a6a
-X-Runtime: 0.034521
-Content-Length: 1</pre>
+X-Request-Id: 2c78c3e7-22f2-44ae-a00d-c61f241d7cac
+X-Runtime: 0.003014
+Content-Length: 157</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body"> </pre>
+              <pre class="response body">{
+  &quot;resource&quot;: {
+    &quot;id&quot;: 534,
+    &quot;user_id&quot;: 204,
+    &quot;name&quot;: &quot;x&quot;,
+    &quot;sign&quot;: &quot;x&quot;,
+    &quot;deleted_at&quot;: null,
+    &quot;created_at&quot;: &quot;2022-12-12T12:32:12.409Z&quot;,
+    &quot;updated_at&quot;: &quot;2022-12-12T12:32:12.409Z&quot;
+  }
+}</pre>
       </div>
     </div>
   </body>
