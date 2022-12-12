@@ -6,11 +6,7 @@ class Api::V1::SessionsController < ApplicationController
       canSignin = ValidationCode.exists?(email: params[:email], code: params[:code], used_at: nil)
       return render status: :unauthorized unless canSignin # 401
     end
-    user = User.find_by_email(params[:email])
-    if user.nil?
-      render status: 404, json: { errors: "User dose not exist." } # :not_found
-    else
-      render status: 200, json: { jwt: user.generate_jwt } # :ok
-    end
+    user = User.find_or_create_by email: params[:email]
+    render status: 200, json: { jwt: user.generate_jwt } # :ok
   end
 end
