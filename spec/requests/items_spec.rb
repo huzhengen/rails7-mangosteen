@@ -72,7 +72,7 @@ RSpec.describe "Items", type: :request do
   end
 
   describe "create" do
-    it "can create an item" do
+    xit "can create an item" do
       expect {
         post "/api/v1/items", params: { amount: 99 }
       }.to change { Item.count }.by 1
