@@ -84,4 +84,29 @@ RSpec.describe "Tags", type: :request do
       expect(json["resource"]["sign"]).to eq "x"
     end
   end
+
+  describe "delete a tag" do
+    it "not logged in" do
+      user1 = User.create! email: "1@gmail.com"
+      tag = Tag.create! name: "x", sign: "x", user_id: user1.id
+      delete "/api/v1/tags/#{tag.id}"
+      expect(response).to have_http_status(401)
+    end
+    it "delete a tag" do
+      user1 = User.create! email: "1@gmail.com"
+      tag = Tag.create! name: "x", sign: "x", user_id: user1.id
+      delete "/api/v1/tags/#{tag.id}", headers: user1.generate_auth_header
+      expect(response).to have_http_status(200)
+      tag.reload
+      expect(tag.deleted_at).not_to eq nil
+    end
+    it "delete others' tag" do
+      user1 = User.create! email: "1@gmail.com"
+      user2 = User.create! email: "2@gmail.com"
+      tag1 = Tag.create! name: "1", sign: "1", user_id: user1.id
+      tag2 = Tag.create! name: "2", sign: "2", user_id: user2.id
+      delete "/api/v1/tags/#{tag2.id}", headers: user1.generate_auth_header
+      expect(response).to have_http_status(403)
+    end
+  end
 end
