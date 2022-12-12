@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Sessions API</title>
+    <title>Tags API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,75 +106,28 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>Sessions API</h1>
+      <h1>Tags API</h1>
 
       <div class="article">
-        <h2>Sign in</h2>
-        <h3>POST /api/v1/session</h3>
+        <h2>Delete tag</h2>
+        <h3>DELETE /api/v1/tags/:id</h3>
 
-          <h3>Parameters</h3>
-          <table class="parameters table table-striped table-bordered table-condensed">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="required">
-                    <span class="name">email</span>
-                </td>
-                <td>
-                  <span class="description">Email</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">code</span>
-                </td>
-                <td>
-                  <span class="description">Code</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
 
-          <h3>Response Fields</h3>
-          <table class="response-fields table table-striped table-bordered table-condensed">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                    <span class="name">jwt</span>
-                </td>
-                <td>
-                  <span class="description">Token for authenticating the user</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
 
           <h3>Request</h3>
 
             <h4>Headers</h4>
             <pre class="request headers">Version: HTTP/1.0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxNDUsImV4cCI6MTY3MDg1NDU0M30.wvs_S0b4GUryPe0jXEmr1g-g4iscjPiMb65eiqXTGN0
 Accept: application/json
 Content-Type: application/json
 Host: example.org
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/session</pre>
+          <pre class="request route highlight">DELETE /api/v1/tags/403</pre>
 
 
-            <h4>Body</h4>
-            <pre class="request body">{"email":"1@gmail.com","code":"123456"}</pre>
 
 
             <h3>Response</h3>
@@ -185,19 +138,13 @@ X-Content-Type-Options: nosniff
 X-Download-Options: noopen
 X-Permitted-Cross-Domain-Policies: none
 Referrer-Policy: strict-origin-when-cross-origin
-Content-Type: application/json; charset=utf-8
-Vary: Accept
-ETag: W/&quot;287aec132233a407959cc83a6bc9196b&quot;
-Cache-Control: max-age=0, private, must-revalidate
-X-Request-Id: 9694b343-c41a-4de0-b8e5-07daeed4cf2e
-X-Runtime: 0.008936
-Content-Length: 118</pre>
+Content-Type: application/json
+Cache-Control: no-cache
+X-Request-Id: a4261b54-1288-4e86-8f8e-86200fb7b3e7
+X-Runtime: 0.013143
+Content-Length: 0</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
-              <h4>Body</h4>
-              <pre class="response body">{
-  &quot;jwt&quot;: &quot;eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxNDEsImV4cCI6MTY3MDg1NDU0M30.DmpFySiUk-P99Yp1TIe0rjP3uOGeDrTtBCCThAXWlz8&quot;
-}</pre>
       </div>
     </div>
   </body>
