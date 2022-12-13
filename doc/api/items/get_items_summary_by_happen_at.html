@@ -109,8 +109,8 @@ table th, table td {
       <h1>Items API</h1>
 
       <div class="article">
-        <h2>Create an item</h2>
-        <h3>POST /api/v1/items</h3>
+        <h2>Get items summary by happen_at</h2>
+        <h3>GET /api/v1/items/summary</h3>
 
           <h3>Parameters</h3>
           <table class="parameters table table-striped table-bordered table-condensed">
@@ -123,26 +123,18 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">amount</span>
+                    <span class="name">happened_after</span>
                 </td>
                 <td>
-                  <span class="description">Amount</span>
+                  <span class="description">Start time</span>
                 </td>
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">tags_id</span>
+                    <span class="name">happened_before</span>
                 </td>
                 <td>
-                  <span class="description">Tag ids</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">happen_at</span>
-                </td>
-                <td>
-                  <span class="description">Happen time</span>
+                  <span class="description">End time</span>
                 </td>
               </tr>
               <tr>
@@ -151,6 +143,14 @@ table th, table td {
                 </td>
                 <td>
                   <span class="description">Kind</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">group_by</span>
+                </td>
+                <td>
+                  <span class="description">happen_at</span>
                 </td>
               </tr>
             </tbody>
@@ -167,42 +167,18 @@ table th, table td {
             <tbody>
               <tr>
                 <td>
-                    <span class="name">resources[id]</span>
+                    <span class="name">groups</span>
                 </td>
                 <td>
-                  <span class="description">ID</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">resources[amount]</span>
-                </td>
-                <td>
-                  <span class="description">Amount(cent)</span>
+                  <span class="description">Group</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">resources[tags_id]</span>
+                    <span class="name">total</span>
                 </td>
                 <td>
-                  <span class="description">Tag ids</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">resources[happen_at]</span>
-                </td>
-                <td>
-                  <span class="description">Happen time</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">resources[kind]</span>
-                </td>
-                <td>
-                  <span class="description">Kind</span>
+                  <span class="description">Total</span>
                 </td>
               </tr>
             </tbody>
@@ -212,18 +188,21 @@ table th, table td {
 
             <h4>Headers</h4>
             <pre class="request headers">Version: HTTP/1.0
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxNjMsImV4cCI6MTY3MDkzMTUxN30.Z42HWLSbYNH-pOH-XVu2-Lx2QToi0KyeOLL8dzjpQgY
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxNjQsImV4cCI6MTY3MDkzMTUxN30.j_3uQdiF255_sPNh8rVOfoOIDuP9lA2QEGfl-UMaAcw
 Accept: application/json
 Content-Type: application/json
 Host: example.org
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/items</pre>
+          <pre class="request route highlight">GET /api/v1/items/summary?happened_after=2018-01-01&amp;happened_before=2019-01-01&amp;kind=expenses&amp;group_by=happen_at</pre>
 
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">happened_after: 2018-01-01
+happened_before: 2019-01-01
+kind: expenses
+group_by: happen_at</pre>
 
-            <h4>Body</h4>
-            <pre class="request body">{"amount":100,"tags_id":[315,316],"happen_at":"2018-01-01T00:00:00+08:00","kind":"expenses"}</pre>
 
 
             <h3>Response</h3>
@@ -236,29 +215,30 @@ X-Permitted-Cross-Domain-Policies: none
 Referrer-Policy: strict-origin-when-cross-origin
 Content-Type: application/json; charset=utf-8
 Vary: Accept
-ETag: W/&quot;d1ab099917b6ffa1c82dc8c0f822a4e6&quot;
+ETag: W/&quot;58bbde78242a2dd2786b4d8c1f13c2cf&quot;
 Cache-Control: max-age=0, private, must-revalidate
-X-Request-Id: 80d487f4-ee98-4fd8-8b3a-aae5f2d73083
-X-Runtime: 0.008100
-Content-Length: 219</pre>
+X-Request-Id: f2893a0e-c7fd-4320-9ced-4ac9fb187c95
+X-Runtime: 0.008307
+Content-Length: 144</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;resource&quot;: {
-    &quot;id&quot;: 302,
-    &quot;user_id&quot;: 163,
-    &quot;amount&quot;: 100,
-    &quot;note&quot;: null,
-    &quot;tags_id&quot;: [
-      315,
-      316
-    ],
-    &quot;happen_at&quot;: &quot;2017-12-31T16:00:00.000Z&quot;,
-    &quot;created_at&quot;: &quot;2022-12-13T09:38:37.637Z&quot;,
-    &quot;updated_at&quot;: &quot;2022-12-13T09:38:37.637Z&quot;,
-    &quot;kind&quot;: &quot;expenses&quot;
-  }
+  &quot;groups&quot;: [
+    {
+      &quot;happen_at&quot;: &quot;2018-06-18&quot;,
+      &quot;amount&quot;: 300
+    },
+    {
+      &quot;happen_at&quot;: &quot;2018-06-19&quot;,
+      &quot;amount&quot;: 300
+    },
+    {
+      &quot;happen_at&quot;: &quot;2018-06-20&quot;,
+      &quot;amount&quot;: 300
+    }
+  ],
+  &quot;total&quot;: 900
 }</pre>
       </div>
     </div>
