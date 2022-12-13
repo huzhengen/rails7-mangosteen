@@ -37,6 +37,11 @@ ValidationCode.destroy_all
 ValidationCode.count
 ```
 
+Rails
+```
+bin/rails routes
+```
+
 User
 ```
 bin/rails g model user email:string name:string

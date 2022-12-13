@@ -77,7 +77,7 @@ RSpec.describe "Items", type: :request do
     end
   end
 
-  describe "create one item" do
+  describe "Create one item" do
     it "not logged in" do
       post "/api/v1/items", params: { amount: 100 }
       expect(response).to have_http_status(401)
@@ -105,6 +105,33 @@ RSpec.describe "Items", type: :request do
       json = JSON.parse(response.body)
       expect(json["errors"]["amount"][0]).to eq "can't be blank"
       expect(json["errors"]["tags_id"][0]).to eq "can't be blank"
+    end
+  end
+
+  describe "Statistics" do
+    it "grouped by day/happen_at" do
+      user = User.create! email: "1@gmail.com"
+      tag = Tag.create! name: "name", sign: "sign", user_id: user.id
+      Item.create! happen_at: "2018-06-18T00:00:00+08:00", amount: 100, tags_id: [tag.id], kind: "expenses", user_id: user.id
+      Item.create! happen_at: "2018-06-18T00:00:00+08:00", amount: 200, tags_id: [tag.id], kind: "expenses", user_id: user.id
+      Item.create! happen_at: "2018-06-20T00:00:00+08:00", amount: 100, tags_id: [tag.id], kind: "expenses", user_id: user.id
+      Item.create! happen_at: "2018-06-20T00:00:00+08:00", amount: 200, tags_id: [tag.id], kind: "expenses", user_id: user.id
+      Item.create! happen_at: "2018-06-19T00:00:00+08:00", amount: 100, tags_id: [tag.id], kind: "expenses", user_id: user.id
+      Item.create! happen_at: "2018-06-19T00:00:00+08:00", amount: 200, tags_id: [tag.id], kind: "expenses", user_id: user.id
+      get "/api/v1/items/summary", params: {
+                                     happened_after: "2018-01-01", happened_before: "2019-01-01",
+                                     kind: "expenses", group_by: "happen_at",
+                                   }, headers: user.generate_auth_header
+      expect(response).to have_http_status 200
+      json = JSON.parse response.body
+      expect(json["groups"].size).to eq 3
+      expect(json["groups"][0]["happen_at"]).to eq "2018-06-18"
+      expect(json["groups"][0]["amount"]).to eq 300
+      expect(json["groups"][1]["happen_at"]).to eq "2018-06-19"
+      expect(json["groups"][1]["amount"]).to eq 300
+      expect(json["groups"][2]["happen_at"]).to eq "2018-06-20"
+      expect(json["groups"][2]["amount"]).to eq 300
+      expect(json["total"]).to eq 900
     end
   end
 end
