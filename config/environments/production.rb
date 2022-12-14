@@ -13,7 +13,7 @@ Rails.application.configure do
   config.eager_load = true
 
   # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local = false
 
   # Ensures that a master key has been made available in either ENV["RAILS_MASTER_KEY"]
   # or in config/master.key. This key is used to decrypt credentials (and other encrypted files).
@@ -46,16 +46,33 @@ Rails.application.configure do
   config.log_level = :info
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [ :request_id ]
+  config.log_tags = [:request_id]
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
-  # config.active_job.queue_name_prefix = "rails7_mangosteen_production"
+  # config.active_job.queue_name_prefix = "mangosteen_1_production"
+
+  config.action_mailer.raise_delivery_errors = true
 
   config.action_mailer.perform_caching = false
+  config.action_mailer.delivery_method = :smtp
+  # https://www.redmine.org/boards/1/topics/59602
+  config.action_mailer.smtp_settings = {
+    address: "smtp.163.com",
+    port: 587,
+    domain: "smtp.163.com",
+    user_name: "huzhengennn@163.com",
+    password: Rails.application.credentials.email_password,
+    authentication: "plain",
+    enable_starttls_auto: true,
+    open_timeout: 10,
+    read_timeout: 10,
+    ssl: true,
+    openssl_verify_mode: "none",
+  }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -76,9 +93,9 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new "app-name")
 
   if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger           = ActiveSupport::Logger.new(STDOUT)
+    logger = ActiveSupport::Logger.new(STDOUT)
     logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
+    config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
 
   # Do not dump schema after migrations.
