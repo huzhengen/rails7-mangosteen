@@ -17,7 +17,7 @@ RSpec.describe "ValidationCodes", type: :request do
       expect(response).to have_http_status(422)
       json = JSON.parse(response.body)
       expect(json["errors"]["email"][0]).to be_a String
-      expect(json["errors"]["email"][0]).to eq("is invalid")
+      expect(json["errors"]["email"][0]).to eq("incorrect email format")
     end
   end
 end

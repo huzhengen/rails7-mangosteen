@@ -29,13 +29,13 @@
 # To learn more, please read the Rails Internationalization guide
 # available at https://guides.rubyonrails.org/i18n.html.
 
-en:
+zh-CN:
   activerecord:
     errors:
       messages:
-        invalid: incorrect format
+        invalid: 格式不正确
       models:
         validation_code:
           attributes:
             email:
-              invalid: incorrect email format
+              invalid: 邮箱地址格式不正确
