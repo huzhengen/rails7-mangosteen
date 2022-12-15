@@ -34,8 +34,16 @@ en:
     errors:
       messages:
         invalid: incorrect format
+        blank: required
+        not_found: not found
       models:
         validation_code:
           attributes:
             email:
               invalid: incorrect email format
+  activemodel:
+    errors:
+      messages:
+        invalid: incorrect format
+        blank: required
+        not_found: not found
