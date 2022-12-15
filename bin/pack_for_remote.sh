@@ -29,6 +29,8 @@ title "打包本地依赖 ${vendor_1}"
 bundle cache --quiet
 tar -cz -f "$vendor_dir/cache.tar.gz" -C ./vendor cache
 tar -cz -f "$vendor_dir/$vendor_1.tar.gz" -C ./vendor $vendor_1
+title '删除 deploys 目录'
+ssh $user@$ip "rm -rf /home/$user/deploys/"
 title '创建远程目录'
 ssh $user@$ip "mkdir -p $deploy_dir/vendor"
 title '上传源代码和依赖'
