@@ -26,6 +26,25 @@ RSpec.describe "Tags", type: :request do
       json = JSON.parse(response.body)
       expect(json["resources"].size).to eq 1
     end
+    it "get tags by kind" do
+      user1 = User.create! email: "1@gmail.com"
+      11.times do |i|
+        Tag.create! name: "tag#{i}", sign: "x", kind: "expenses", user_id: user1.id
+      end
+      11.times do |i|
+        Tag.create! name: "tag#{i}", sign: "x", kind: "income", user_id: user1.id
+      end
+
+      get "/api/v1/tags", headers: user1.generate_auth_header, params: { kind: "expenses" }
+      expect(response).to have_http_status(200)
+      json = JSON.parse(response.body)
+      expect(json["resources"].size).to eq 10
+
+      get "/api/v1/tags", headers: user1.generate_auth_header, params: { kind: "expenses", page: 2 }
+      expect(response).to have_http_status(200)
+      json = JSON.parse(response.body)
+      expect(json["resources"].size).to eq 1
+    end
   end
   describe "create tags" do
     it "not logged in" do

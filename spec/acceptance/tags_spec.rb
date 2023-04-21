@@ -7,6 +7,7 @@ resource "Tags" do
   let(:auth) { "Bearer #{current_user.generate_jwt}" }
   get "/api/v1/tags" do
     parameter :page, "Page"
+    parameter :kind, "Kind", in: ["expenses", "income"]
     with_options :scope => :resources do
       response_field :id, "ID"
       response_field :user_id, "User id"
@@ -16,7 +17,7 @@ resource "Tags" do
     end
     example "Get tags" do
       11.times do |i|
-        Tag.create name: "tag#{i}", sign: "x", user_id: current_user.id
+        Tag.create name: "tag#{i}", sign: "x", kind: "expenses", user_id: current_user.id
       end
       do_request
       expect(status).to eq 200

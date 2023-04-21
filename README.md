@@ -67,6 +67,7 @@ Tags
 ```
 bin/rails g model tag user:references name:string sign:string deleted_at:datetime
 bin/rails g controller api/v1/tags
+bin/rails g migration AddKindToTags
 ```
 
 Sessions
