@@ -96,7 +96,6 @@ resource "Items" do
       do_request group_by: "tag_id"
       expect(status).to eq 200
       json = JSON.parse response_body
-      p json
       expect(json["groups"].size).to eq 3
       expect(json["groups"][0]["tag_id"]).to eq tag3.id
       expect(json["groups"][0]["amount"]).to eq 500

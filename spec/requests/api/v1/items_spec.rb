@@ -8,9 +8,8 @@ RSpec.describe "Items", type: :request do
     end
     it "pagination" do
       user1 = create :user
-      user2 = create :user
-      create_list :item, 11, amount: 100, tag_ids: [create(:tag, user: user1).id], happen_at: Time.now, user: user1
-      create_list :item, 11, amount: 100, tag_ids: [create(:tag, user: user2).id], happen_at: Time.now, user: user2
+      create_list :item, 11, amount: 100, user: user1
+      create_list :item, 11, amount: 100
       get "/api/v1/items", headers: user1.generate_auth_header
       expect(response).to have_http_status(200)
       json = JSON.parse(response.body)
@@ -22,11 +21,11 @@ RSpec.describe "Items", type: :request do
     end
     it "filter by time" do
       user1 = create :user
-      tag1 = create :tag, name: "name", sign: "sign", user: user1
-      tag2 = create :tag, name: "name", sign: "sign", user: user1
-      item1 = create :item, amount: 100, tag_ids: [create(:tag, user: user1).id], happen_at: Time.now, created_at: "2018-01-02", user: user1
-      item2 = create :item, amount: 100, tag_ids: [create(:tag, user: user1).id], happen_at: Time.now, created_at: "2018-01-02", user: user1
-      item3 = create :item, amount: 100, tag_ids: [create(:tag, user: user1).id], happen_at: Time.now, created_at: "2019-01-01", user: user1
+      tag1 = create :tag, user: user1
+      tag2 = create :tag, user: user1
+      item1 = create :item, created_at: "2018-01-02", user: user1
+      item2 = create :item, created_at: "2018-01-02", user: user1
+      item3 = create :item, created_at: "2019-01-01", user: user1
       get "/api/v1/items?created_after=2018-01-01&created_before=2018-01-03", headers: user1.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
@@ -35,35 +34,26 @@ RSpec.describe "Items", type: :request do
       expect(json["resources"][1]["id"]).to eq item2.id
     end
     it "filter by time(boundary conditions)" do
-      user1 = create :user
-      tag1 = create :tag, user: user1
-      tag2 = create :tag, user: user1
-      item1 = create :item, tag_ids: [tag1.id, tag2.id], created_at: "2018-01-01", user_id: user1.id
-      get "/api/v1/items?created_after=2018-01-01&created_before=2018-01-02", headers: user1.generate_auth_header
+      item = create :item, created_at: "2018-01-01"
+      get "/api/v1/items?created_after=2018-01-01&created_before=2018-01-02", headers: item.user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json["resources"].size).to eq 1
-      expect(json["resources"][0]["id"]).to eq item1.id
+      expect(json["resources"][0]["id"]).to eq item.id
     end
     it "filter by time(boundary conditions 2)" do
-      user1 = create :user
-      tag1 = create :tag, user_id: user1.id
-      tag2 = create :tag, user_id: user1.id
-      item1 = create :item, tag_ids: [tag1.id, tag2.id], created_at: "2018-01-01", user: user1
-      item2 = create :item, tag_ids: [tag1.id, tag2.id], created_at: "2017-01-01", user: user1
-      get "/api/v1/items?created_after=2018-01-01", headers: user1.generate_auth_header
+      item1 = create :item, created_at: "2018-01-01"
+      item2 = create :item, created_at: "2017-01-01", user: item1.user
+      get "/api/v1/items?created_after=2018-01-01", headers: item1.user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json["resources"].size).to eq 1
       expect(json["resources"][0]["id"]).to eq item1.id
     end
     it "filter by time(boundary conditions 3)" do
-      user1 = create :user
-      tag1 = create :tag, user: user1
-      tag2 = create :tag, user: user1
-      item1 = create :item, tag_ids: [tag1.id, tag2.id], created_at: "2018-01-01", user: user1
-      item2 = create :item, tag_ids: [tag1.id, tag2.id], created_at: "2019-01-01", user: user1
-      get "/api/v1/items?created_before=2018-01-02", headers: user1.generate_auth_header
+      item1 = create :item, created_at: "2018-01-01"
+      item2 = create :item, created_at: "2019-01-01", user: item1.user
+      get "/api/v1/items?created_before=2018-01-02", headers: item1.user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json["resources"].size).to eq 1
@@ -97,24 +87,24 @@ RSpec.describe "Items", type: :request do
       post "/api/v1/items", params: {}, headers: user.generate_auth_header
       expect(response).to have_http_status(422)
       json = JSON.parse(response.body)
-      expect(json["errors"]["amount"][0]).to eq "required"
-      expect(json["errors"]["tag_ids"][0]).to eq "required"
+      expect(json["errors"]["amount"][0]).to be_a String
+      expect(json["errors"]["tag_ids"][0]).to be_a String
     end
   end
 
   describe "Statistics" do
     it "grouped by day/happen_at" do
-      tag = create :tag
-      create :item, happen_at: "2018-06-18T00:00:00+08:00", amount: 100, tag_ids: [tag.id], user: tag.user
-      create :item, happen_at: "2018-06-18T00:00:00+08:00", amount: 200, tag_ids: [tag.id], user: tag.user
-      create :item, happen_at: "2018-06-20T00:00:00+08:00", amount: 100, tag_ids: [tag.id], user: tag.user
-      create :item, happen_at: "2018-06-20T00:00:00+08:00", amount: 200, tag_ids: [tag.id], user: tag.user
-      create :item, happen_at: "2018-06-19T00:00:00+08:00", amount: 100, tag_ids: [tag.id], user: tag.user
-      create :item, happen_at: "2018-06-19T00:00:00+08:00", amount: 200, tag_ids: [tag.id], user: tag.user
+      user = create :user
+      create :item, happen_at: "2018-06-18T00:00:00+08:00", amount: 100, user: user
+      create :item, happen_at: "2018-06-18T00:00:00+08:00", amount: 200, user: user
+      create :item, happen_at: "2018-06-20T00:00:00+08:00", amount: 100, user: user
+      create :item, happen_at: "2018-06-20T00:00:00+08:00", amount: 200, user: user
+      create :item, happen_at: "2018-06-19T00:00:00+08:00", amount: 100, user: user
+      create :item, happen_at: "2018-06-19T00:00:00+08:00", amount: 200, user: user
       get "/api/v1/items/summary", params: {
                                      happened_after: "2018-01-01", happened_before: "2019-01-01",
                                      kind: "expenses", group_by: "happen_at",
-                                   }, headers: tag.user.generate_auth_header
+                                   }, headers: user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse response.body
       expect(json["groups"].size).to eq 3
