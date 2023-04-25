@@ -12,7 +12,7 @@ resource "Items" do
     with_options :scope => :resources do
       response_field :id, "ID"
       response_field :amount, "Amount(cent)"
-      response_field :tags_id, "Tag ids"
+      response_field :tag_ids, "Tag ids"
       response_field :happen_at, "Happen time"
       response_field :kind, "Kind"
     end
@@ -22,7 +22,7 @@ resource "Items" do
       tag1 = Tag.create! name: "name", sign: "sign", user_id: current_user.id
       tag2 = Tag.create! name: "name", sign: "sign", user_id: current_user.id
       11.times do
-        Item.create amount: 100, tags_id: [tag1.id, tag2.id], happen_at: Time.now, user_id: current_user.id
+        Item.create amount: 100, tag_ids: [tag1.id, tag2.id], happen_at: Time.now, user_id: current_user.id
       end
       do_request
       expect(status).to eq 200
@@ -33,13 +33,13 @@ resource "Items" do
 
   post "/api/v1/items" do
     parameter :amount, "Amount", required: true
-    parameter :tags_id, "Tag ids", required: true
+    parameter :tag_ids, "Tag ids", required: true
     parameter :happen_at, "Happen time", required: true
     parameter :kind, "Kind", required: true, emum: ["expenses", "income"]
     with_options :scope => :resources do
       response_field :id, "ID"
       response_field :amount, "Amount(cent)"
-      response_field :tags_id, "Tag ids"
+      response_field :tag_ids, "Tag ids"
       response_field :happen_at, "Happen time"
       response_field :kind, "Kind"
     end
@@ -47,7 +47,7 @@ resource "Items" do
     let(:happen_at) { "2018-01-01T00:00:00+08:00" }
     let(:kind) { "expenses" }
     let(:tags) { (0..1).map { Tag.create! name: "name", sign: "sign", user_id: current_user.id } }
-    let(:tags_id) { tags.map(&:id) }
+    let(:tag_ids) { tags.map(&:id) }
     example "Create an item" do
       do_request
       expect(status).to eq 200
@@ -70,12 +70,12 @@ resource "Items" do
     example "Get items summary by happen_at" do
       user = current_user
       tag = Tag.create! name: "tag1", sign: "x", user_id: user.id
-      Item.create! amount: 100, kind: "expenses", tags_id: [tag.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
-      Item.create! amount: 200, kind: "expenses", tags_id: [tag.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
-      Item.create! amount: 100, kind: "expenses", tags_id: [tag.id], happen_at: "2018-06-20T00:00:00+08:00", user_id: user.id
-      Item.create! amount: 200, kind: "expenses", tags_id: [tag.id], happen_at: "2018-06-20T00:00:00+08:00", user_id: user.id
-      Item.create! amount: 100, kind: "expenses", tags_id: [tag.id], happen_at: "2018-06-19T00:00:00+08:00", user_id: user.id
-      Item.create! amount: 200, kind: "expenses", tags_id: [tag.id], happen_at: "2018-06-19T00:00:00+08:00", user_id: user.id
+      Item.create! amount: 100, kind: "expenses", tag_ids: [tag.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
+      Item.create! amount: 200, kind: "expenses", tag_ids: [tag.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
+      Item.create! amount: 100, kind: "expenses", tag_ids: [tag.id], happen_at: "2018-06-20T00:00:00+08:00", user_id: user.id
+      Item.create! amount: 200, kind: "expenses", tag_ids: [tag.id], happen_at: "2018-06-20T00:00:00+08:00", user_id: user.id
+      Item.create! amount: 100, kind: "expenses", tag_ids: [tag.id], happen_at: "2018-06-19T00:00:00+08:00", user_id: user.id
+      Item.create! amount: 200, kind: "expenses", tag_ids: [tag.id], happen_at: "2018-06-19T00:00:00+08:00", user_id: user.id
       do_request group_by: "happen_at"
       expect(status).to eq 200
       json = JSON.parse response_body
@@ -94,9 +94,9 @@ resource "Items" do
       tag1 = Tag.create! name: "tag1", sign: "x", user_id: user.id
       tag2 = Tag.create! name: "tag2", sign: "x", user_id: user.id
       tag3 = Tag.create! name: "tag3", sign: "x", user_id: user.id
-      Item.create! amount: 100, kind: "expenses", tags_id: [tag1.id, tag2.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
-      Item.create! amount: 200, kind: "expenses", tags_id: [tag2.id, tag3.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
-      Item.create! amount: 300, kind: "expenses", tags_id: [tag3.id, tag1.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
+      Item.create! amount: 100, kind: "expenses", tag_ids: [tag1.id, tag2.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
+      Item.create! amount: 200, kind: "expenses", tag_ids: [tag2.id, tag3.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
+      Item.create! amount: 300, kind: "expenses", tag_ids: [tag3.id, tag1.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
       do_request group_by: "tag_id"
       expect(status).to eq 200
       json = JSON.parse response_body
