@@ -7,16 +7,10 @@ RSpec.describe "Items", type: :request do
       expect(response).to have_http_status(401)
     end
     it "pagination" do
-      user1 = User.create! email: "1@gmail.com"
-      user2 = User.create! email: "2@gmail.com"
-      tag1 = Tag.create! name: "name", sign: "sign", user_id: user1.id
-      tag2 = Tag.create! name: "name", sign: "sign", user_id: user1.id
-      11.times do
-        Item.create! amount: 100, tags_id: [tag1.id, tag2.id], happen_at: Time.now, user_id: user1.id
-      end
-      11.times do
-        Item.create! amount: 100, tags_id: [tag1.id, tag2.id], happen_at: Time.now, user_id: user2.id
-      end
+      user1 = create :user, email: "1@gmail.com"
+      user2 = create :user, email: "2@gmail.com"
+      create_list :item, 11, amount: 100, tags_id: [create(:tag, user: user1).id], happen_at: Time.now, user: user1
+      create_list :item, 11, amount: 100, tags_id: [create(:tag, user: user2).id], happen_at: Time.now, user: user2
       get "/api/v1/items", headers: user1.generate_auth_header
       expect(response).to have_http_status(200)
       json = JSON.parse(response.body)
@@ -27,12 +21,12 @@ RSpec.describe "Items", type: :request do
       expect(json["resources"].size).to eq 1
     end
     it "filter by time" do
-      user1 = User.create! email: "1@gmail.com"
-      tag1 = Tag.create! name: "name", sign: "sign", user_id: user1.id
-      tag2 = Tag.create! name: "name", sign: "sign", user_id: user1.id
-      item1 = Item.create amount: 100, tags_id: [tag1.id, tag2.id], happen_at: Time.now, created_at: "2018-01-02", user_id: user1.id
-      item2 = Item.create amount: 100, tags_id: [tag1.id, tag2.id], happen_at: Time.now, created_at: "2018-01-02", user_id: user1.id
-      item3 = Item.create amount: 100, tags_id: [tag1.id, tag2.id], happen_at: Time.now, created_at: "2019-01-01", user_id: user1.id
+      user1 = create :user, email: "1@gmail.com"
+      tag1 = create :tag, name: "name", sign: "sign", user: user1
+      tag2 = create :tag, name: "name", sign: "sign", user: user1
+      item1 = create :item, amount: 100, tags_id: [create(:tag, user: user1).id], happen_at: Time.now, created_at: "2018-01-02", user: user1
+      item2 = create :item, amount: 100, tags_id: [create(:tag, user: user1).id], happen_at: Time.now, created_at: "2018-01-02", user: user1
+      item3 = create :item, amount: 100, tags_id: [create(:tag, user: user1).id], happen_at: Time.now, created_at: "2019-01-01", user: user1
       get "/api/v1/items?created_after=2018-01-01&created_before=2018-01-03", headers: user1.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
@@ -103,8 +97,8 @@ RSpec.describe "Items", type: :request do
       post "/api/v1/items", params: {}, headers: user.generate_auth_header
       expect(response).to have_http_status(422)
       json = JSON.parse(response.body)
-      expect(json["errors"]["amount"][0]).to eq "can't be blank"
-      expect(json["errors"]["tags_id"][0]).to eq "can't be blank"
+      expect(json["errors"]["amount"][0]).to eq "required"
+      expect(json["errors"]["tags_id"][0]).to eq "required"
     end
   end
 

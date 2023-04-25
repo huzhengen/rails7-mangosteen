@@ -10,10 +10,10 @@ RSpec.describe "Tags", type: :request do
       user1 = User.create! email: "1@gmail.com"
       user2 = User.create! email: "2@gmail.com"
       11.times do |i|
-        Tag.create! name: "tag#{i}", sign: "x", user_id: user1.id
+        create :tag, name: "tag#{i}", sign: "x", user: user1
       end
       11.times do |i|
-        Tag.create! name: "tag#{i}", sign: "x", user_id: user2.id
+        create :tag, name: "tag#{i}", sign: "x", user: user2
       end
 
       get "/api/v1/tags", headers: user1.generate_auth_header
@@ -65,7 +65,7 @@ RSpec.describe "Tags", type: :request do
       expect(response).to have_http_status(422)
       json = JSON.parse(response.body)
       expect(json["errors"]["name"]).to be_an Array
-      expect(json["errors"]["name"][0]).to eq "can't be blank"
+      expect(json["errors"]["name"][0]).to eq "required"
     end
     it "need sign when creating tag" do
       user1 = User.create! email: "1@gmail.com"
@@ -73,7 +73,7 @@ RSpec.describe "Tags", type: :request do
       expect(response).to have_http_status(422)
       json = JSON.parse(response.body)
       expect(json["errors"]["sign"]).to be_an Array
-      expect(json["errors"]["sign"][0]).to eq "can't be blank"
+      expect(json["errors"]["sign"][0]).to eq "required"
     end
   end
 

@@ -152,3 +152,5 @@ middleware
 ```
 bin/rails middleware
 ```
+
+https://github.com/thoughtbot/factory_bot/blob/master/GETTING_STARTED.md#configure-your-test-suite
