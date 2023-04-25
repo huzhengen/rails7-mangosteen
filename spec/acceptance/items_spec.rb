@@ -21,9 +21,7 @@ resource "Items" do
     example "Get items" do
       tag1 = create :tag, user: current_user
       tag2 = create :tag, user: current_user
-      11.times do
-        Item.create amount: 100, tag_ids: [tag1.id, tag2.id], happen_at: Time.now, user_id: current_user.id
-      end
+      create_list :item, 11, tag_ids: [tag1.id, tag2.id], user: current_user
       do_request
       expect(status).to eq 200
       json = JSON.parse response_body
@@ -69,12 +67,12 @@ resource "Items" do
     let(:kind) { "expenses" }
     example "Get items summary by happen_at" do
       tag = create :tag, user: current_user
-      Item.create! amount: 100, kind: "expenses", tag_ids: [tag.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: current_user.id
-      Item.create! amount: 200, kind: "expenses", tag_ids: [tag.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: current_user.id
-      Item.create! amount: 100, kind: "expenses", tag_ids: [tag.id], happen_at: "2018-06-20T00:00:00+08:00", user_id: current_user.id
-      Item.create! amount: 200, kind: "expenses", tag_ids: [tag.id], happen_at: "2018-06-20T00:00:00+08:00", user_id: current_user.id
-      Item.create! amount: 100, kind: "expenses", tag_ids: [tag.id], happen_at: "2018-06-19T00:00:00+08:00", user_id: current_user.id
-      Item.create! amount: 200, kind: "expenses", tag_ids: [tag.id], happen_at: "2018-06-19T00:00:00+08:00", user_id: current_user.id
+      create :item, amount: 100, tag_ids: [tag.id], happen_at: "2018-06-18T00:00:00+08:00", user: current_user
+      create :item, amount: 200, tag_ids: [tag.id], happen_at: "2018-06-18T00:00:00+08:00", user: current_user
+      create :item, amount: 100, tag_ids: [tag.id], happen_at: "2018-06-20T00:00:00+08:00", user: current_user
+      create :item, amount: 200, tag_ids: [tag.id], happen_at: "2018-06-20T00:00:00+08:00", user: current_user
+      create :item, amount: 100, tag_ids: [tag.id], happen_at: "2018-06-19T00:00:00+08:00", user: current_user
+      create :item, amount: 200, tag_ids: [tag.id], happen_at: "2018-06-19T00:00:00+08:00", user: current_user
       do_request group_by: "happen_at"
       expect(status).to eq 200
       json = JSON.parse response_body
@@ -92,12 +90,13 @@ resource "Items" do
       tag1 = create :tag, user: current_user
       tag2 = create :tag, user: current_user
       tag3 = create :tag, user: current_user
-      Item.create! amount: 100, kind: "expenses", tag_ids: [tag1.id, tag2.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: current_user.id
-      Item.create! amount: 200, kind: "expenses", tag_ids: [tag2.id, tag3.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: current_user.id
-      Item.create! amount: 300, kind: "expenses", tag_ids: [tag3.id, tag1.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: current_user.id
+      create :item, amount: 100, tag_ids: [tag1.id, tag2.id], happen_at: "2018-06-18T00:00:00+08:00", user: current_user
+      create :item, amount: 200, tag_ids: [tag2.id, tag3.id], happen_at: "2018-06-18T00:00:00+08:00", user: current_user
+      create :item, amount: 300, tag_ids: [tag3.id, tag1.id], happen_at: "2018-06-18T00:00:00+08:00", user: current_user
       do_request group_by: "tag_id"
       expect(status).to eq 200
       json = JSON.parse response_body
+      p json
       expect(json["groups"].size).to eq 3
       expect(json["groups"][0]["tag_id"]).to eq tag3.id
       expect(json["groups"][0]["amount"]).to eq 500
