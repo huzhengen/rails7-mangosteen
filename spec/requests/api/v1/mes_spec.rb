@@ -5,8 +5,8 @@ RSpec.describe "Me", type: :request do
   include ActiveSupport::Testing::TimeHelpers
   describe "Get current user" do
     it "Get user after sign in" do
-      user = User.create! email: "1@gmail.com"
-      post "/api/v1/session", params: { email: "1@gmail.com", code: "123456" }
+      user = create :user
+      post "/api/v1/session", params: { email: user.email, code: "123456" }
       expect(response).to have_http_status(200)
       json = JSON.parse response.body
       jwt = json["jwt"]
@@ -18,7 +18,7 @@ RSpec.describe "Me", type: :request do
     end
     it "jwt过期" do
       travel_to Time.now - 3.hours
-      user1 = User.create! email: "1@gmail.com"
+      user1 = create :user
       jwt = user1.generate_jwt
       travel_back
       get "/api/v1/me", headers: { 'Authorization': "Bearer #{jwt}" }
@@ -26,7 +26,7 @@ RSpec.describe "Me", type: :request do
     end
     it "jwt没过期" do
       travel_to Time.now - 1.hours
-      user1 = User.create! email: "1@gmail.com"
+      user1 = create :user
       jwt = user1.generate_jwt
       travel_back
       get "/api/v1/me", headers: { 'Authorization': "Bearer #{jwt}" }

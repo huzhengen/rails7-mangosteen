@@ -7,8 +7,8 @@ RSpec.describe "Items", type: :request do
       expect(response).to have_http_status(401)
     end
     it "pagination" do
-      user1 = create :user, email: "1@gmail.com"
-      user2 = create :user, email: "2@gmail.com"
+      user1 = create :user
+      user2 = create :user
       create_list :item, 11, amount: 100, tag_ids: [create(:tag, user: user1).id], happen_at: Time.now, user: user1
       create_list :item, 11, amount: 100, tag_ids: [create(:tag, user: user2).id], happen_at: Time.now, user: user2
       get "/api/v1/items", headers: user1.generate_auth_header
@@ -21,7 +21,7 @@ RSpec.describe "Items", type: :request do
       expect(json["resources"].size).to eq 1
     end
     it "filter by time" do
-      user1 = create :user, email: "1@gmail.com"
+      user1 = create :user
       tag1 = create :tag, name: "name", sign: "sign", user: user1
       tag2 = create :tag, name: "name", sign: "sign", user: user1
       item1 = create :item, amount: 100, tag_ids: [create(:tag, user: user1).id], happen_at: Time.now, created_at: "2018-01-02", user: user1
@@ -35,7 +35,7 @@ RSpec.describe "Items", type: :request do
       expect(json["resources"][1]["id"]).to eq item2.id
     end
     it "filter by time(boundary conditions)" do
-      user1 = User.create! email: "1@gmail.com"
+      user1 = create :user
       tag1 = Tag.create! name: "name", sign: "sign", user_id: user1.id
       tag2 = Tag.create! name: "name", sign: "sign", user_id: user1.id
       item1 = Item.create amount: 100, tag_ids: [tag1.id, tag2.id], happen_at: Time.now, created_at: "2018-01-01", user_id: user1.id
@@ -46,7 +46,7 @@ RSpec.describe "Items", type: :request do
       expect(json["resources"][0]["id"]).to eq item1.id
     end
     it "filter by time(boundary conditions 2)" do
-      user1 = User.create! email: "1@gmail.com"
+      user1 = create :user
       tag1 = Tag.create! name: "name", sign: "sign", user_id: user1.id
       tag2 = Tag.create! name: "name", sign: "sign", user_id: user1.id
       item1 = Item.create amount: 100, tag_ids: [tag1.id, tag2.id], happen_at: Time.now, created_at: "2018-01-01", user_id: user1.id
@@ -58,7 +58,7 @@ RSpec.describe "Items", type: :request do
       expect(json["resources"][0]["id"]).to eq item1.id
     end
     it "filter by time(boundary conditions 3)" do
-      user1 = User.create! email: "1@gmail.com"
+      user1 = create :user
       tag1 = Tag.create! name: "name", sign: "sign", user_id: user1.id
       tag2 = Tag.create! name: "name", sign: "sign", user_id: user1.id
       item1 = Item.create amount: 100, tag_ids: [tag1.id, tag2.id], happen_at: Time.now, created_at: "2018-01-01", user_id: user1.id
@@ -77,7 +77,7 @@ RSpec.describe "Items", type: :request do
       expect(response).to have_http_status(401)
     end
     it "create one item" do
-      user = User.create! email: "1@gmail.com"
+      user = create :user
       tag1 = Tag.create! name: "name", sign: "sign", user_id: user.id
       tag2 = Tag.create! name: "name", sign: "sign", user_id: user.id
       expect {
@@ -92,7 +92,7 @@ RSpec.describe "Items", type: :request do
       expect(json["resource"]["happen_at"]).to eq "2017-12-31T16:00:00.000Z"
     end
     it "need 'amount, tag_ids, happen_at' when creating one item" do
-      user = User.create! email: "1@gmail.com"
+      user = create :user
       tag = Tag.create! name: "name", sign: "sign", user_id: user.id
       post "/api/v1/items", params: {}, headers: user.generate_auth_header
       expect(response).to have_http_status(422)
@@ -104,7 +104,7 @@ RSpec.describe "Items", type: :request do
 
   describe "Statistics" do
     it "grouped by day/happen_at" do
-      user = User.create! email: "1@gmail.com"
+      user = create :user
       tag = Tag.create! name: "name", sign: "sign", user_id: user.id
       Item.create! happen_at: "2018-06-18T00:00:00+08:00", amount: 100, tag_ids: [tag.id], kind: "expenses", user_id: user.id
       Item.create! happen_at: "2018-06-18T00:00:00+08:00", amount: 200, tag_ids: [tag.id], kind: "expenses", user_id: user.id
@@ -128,7 +128,7 @@ RSpec.describe "Items", type: :request do
       expect(json["total"]).to eq 900
     end
     it "grouped by tag_ids" do
-      user = User.create! email: "1@gmail.com"
+      user = create :user
       tag1 = Tag.create! name: "tag1", sign: "x", user_id: user.id
       tag2 = Tag.create! name: "tag2", sign: "x", user_id: user.id
       tag3 = Tag.create! name: "tag3", sign: "x", user_id: user.id

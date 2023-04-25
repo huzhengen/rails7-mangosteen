@@ -3,7 +3,7 @@ require "rspec_api_documentation/dsl"
 
 resource "Items" do
   authentication :basic, :auth
-  let(:current_user) { User.create email: "1@gmail.com" }
+  let(:current_user) { create :user }
   let(:auth) { "Bearer #{current_user.generate_jwt}" }
   get "/api/v1/items" do
     parameter :page, "page"
