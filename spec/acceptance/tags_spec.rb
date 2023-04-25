@@ -16,9 +16,7 @@ resource "Tags" do
       response_field :deleted_time, "Delete time"
     end
     example "Get tags" do
-      11.times do |i|
-        Tag.create name: "tag#{i}", sign: "x", kind: "expenses", user_id: current_user.id
-      end
+      create_list :tag, 11, user: current_user
       do_request
       expect(status).to eq 200
       json = JSON.parse response_body
@@ -48,7 +46,7 @@ resource "Tags" do
   end
 
   patch "/api/v1/tags/:id" do
-    let(:tag) { Tag.create! name: "name", sign: "sign", user_id: current_user.id }
+    let(:tag) { create :tag, user: current_user }
     let(:id) { tag.id }
     parameter :name, "Name"
     parameter :sign, "Sign"
@@ -71,7 +69,7 @@ resource "Tags" do
   end
 
   delete "/api/v1/tags/:id" do
-    let(:tag) { Tag.create name: "x", sign: "x", user_id: current_user.id }
+    let(:tag) { create :tag, user: current_user }
     let(:id) { tag.id }
     example "Delete tag" do
       do_request
@@ -80,7 +78,7 @@ resource "Tags" do
   end
 
   get "/api/v1/tags/:id" do
-    let(:tag) { Tag.create name: "x", sign: "x", user_id: current_user.id }
+    let(:tag) { create :tag, user: current_user }
     let(:id) { tag.id }
     with_options :scope => :resources do
       response_field :id, "ID"

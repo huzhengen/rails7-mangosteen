@@ -78,8 +78,8 @@ RSpec.describe "Items", type: :request do
     end
     it "create one item" do
       user = create :user
-      tag1 = Tag.create! name: "name", sign: "sign", user_id: user.id
-      tag2 = Tag.create! name: "name", sign: "sign", user_id: user.id
+      tag1 = create :tag, user: user
+      tag2 = create :tag, user: user
       expect {
         post "/api/v1/items", params: { amount: 100, tag_ids: [tag1.id, tag2.id], happen_at: "2018-01-01T00:00:00+08:00" },
                               headers: user.generate_auth_header
@@ -93,7 +93,7 @@ RSpec.describe "Items", type: :request do
     end
     it "need 'amount, tag_ids, happen_at' when creating one item" do
       user = create :user
-      tag = Tag.create! name: "name", sign: "sign", user_id: user.id
+      tag = create :tag, user: user
       post "/api/v1/items", params: {}, headers: user.generate_auth_header
       expect(response).to have_http_status(422)
       json = JSON.parse(response.body)
@@ -105,7 +105,7 @@ RSpec.describe "Items", type: :request do
   describe "Statistics" do
     it "grouped by day/happen_at" do
       user = create :user
-      tag = Tag.create! name: "name", sign: "sign", user_id: user.id
+      tag = create :tag, user: user
       Item.create! happen_at: "2018-06-18T00:00:00+08:00", amount: 100, tag_ids: [tag.id], kind: "expenses", user_id: user.id
       Item.create! happen_at: "2018-06-18T00:00:00+08:00", amount: 200, tag_ids: [tag.id], kind: "expenses", user_id: user.id
       Item.create! happen_at: "2018-06-20T00:00:00+08:00", amount: 100, tag_ids: [tag.id], kind: "expenses", user_id: user.id
@@ -129,9 +129,9 @@ RSpec.describe "Items", type: :request do
     end
     it "grouped by tag_ids" do
       user = create :user
-      tag1 = Tag.create! name: "tag1", sign: "x", user_id: user.id
-      tag2 = Tag.create! name: "tag2", sign: "x", user_id: user.id
-      tag3 = Tag.create! name: "tag3", sign: "x", user_id: user.id
+      tag1 = create :tag, user: user
+      tag2 = create :tag, user: user
+      tag3 = create :tag, user: user
       Item.create! amount: 100, kind: "expenses", tag_ids: [tag1.id, tag2.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
       Item.create! amount: 200, kind: "expenses", tag_ids: [tag2.id, tag3.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
       Item.create! amount: 300, kind: "expenses", tag_ids: [tag3.id, tag1.id], happen_at: "2018-06-18T00:00:00+08:00", user_id: user.id
