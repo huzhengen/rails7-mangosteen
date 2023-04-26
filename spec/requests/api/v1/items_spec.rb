@@ -8,12 +8,12 @@ RSpec.describe "Items", type: :request do
     end
     it "pagination" do
       user1 = create :user
-      create_list :item, 11, amount: 100, user: user1
-      create_list :item, 11, amount: 100
+      create_list :item, Item.default_per_page + 1, amount: 100, user: user1
+      create_list :item, Item.default_per_page + 1, amount: 100
       get "/api/v1/items", headers: user1.generate_auth_header
       expect(response).to have_http_status(200)
       json = JSON.parse(response.body)
-      expect(json["resources"].size).to eq 10
+      expect(json["resources"].size).to eq Item.default_per_page
       get "/api/v1/items?page=2", headers: user1.generate_auth_header
       expect(response).to have_http_status(200)
       json = JSON.parse(response.body)

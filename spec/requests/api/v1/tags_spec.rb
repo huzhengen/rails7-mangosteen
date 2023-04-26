@@ -9,12 +9,12 @@ RSpec.describe "Tags", type: :request do
     it "pagination" do
       user1 = create :user
       user2 = create :user
-      create_list :tag, 11, user: user1
-      create_list :tag, 11, user: user2
+      create_list :tag, Tag.default_per_page + 1, user: user1
+      create_list :tag, Tag.default_per_page + 1, user: user2
       get "/api/v1/tags", headers: user1.generate_auth_header
       expect(response).to have_http_status(200)
       json = JSON.parse(response.body)
-      expect(json["resources"].size).to eq 10
+      expect(json["resources"].size).to eq Tag.default_per_page
 
       get "/api/v1/tags?page=2", headers: user1.generate_auth_header
       expect(response).to have_http_status(200)
@@ -23,13 +23,13 @@ RSpec.describe "Tags", type: :request do
     end
     it "get tags by kind" do
       user1 = create :user
-      create_list :tag, 11, user: user1
-      create_list :tag, 11, user: user1, kind: "income"
+      create_list :tag, Tag.default_per_page + 1, user: user1
+      create_list :tag, Tag.default_per_page + 1, user: user1, kind: "income"
 
       get "/api/v1/tags", headers: user1.generate_auth_header, params: { kind: "expenses" }
       expect(response).to have_http_status(200)
       json = JSON.parse(response.body)
-      expect(json["resources"].size).to eq 10
+      expect(json["resources"].size).to eq Tag.default_per_page
 
       get "/api/v1/tags", headers: user1.generate_auth_header, params: { kind: "expenses", page: 2 }
       expect(response).to have_http_status(200)

@@ -21,11 +21,11 @@ resource "Items" do
     example "Get items" do
       tag1 = create :tag, user: current_user
       tag2 = create :tag, user: current_user
-      create_list :item, 11, tag_ids: [tag1.id, tag2.id], user: current_user
+      create_list :item, Item.default_per_page + 1, tag_ids: [tag1.id, tag2.id], user: current_user
       do_request
       expect(status).to eq 200
       json = JSON.parse response_body
-      expect(json["resources"].size).to eq 10
+      expect(json["resources"].size).to eq Item.default_per_page
     end
   end
 
