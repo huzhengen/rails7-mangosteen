@@ -162,3 +162,7 @@ bin/rails g migration RenameTagsIdToTagIds
 ```
 bin/rails g migration RemoveDefaultValueOfKind
 ```
+
+```
+bin/rails g migration AddDeleteAtForItems
+```

@@ -115,13 +115,15 @@ RSpec.describe "Tags", type: :request do
     it "delete tag and corresponding bookkeeping" do
       user = create :user
       tag = create :tag, user: user
-      create_list :item, 2, user: user, tag_ids: [tag.id]
-      expect {
-        delete "/api/v1/tags/#{tag.id}?with_items=true", headers: user.generate_auth_header
-      }.to change { Item.count }.by -2
+      items = create_list :item, 2, user: user, tag_ids: [tag.id]
+      delete "/api/v1/tags/#{tag.id}?with_items=true", headers: user.generate_auth_header
       expect(response).to have_http_status(200)
       tag.reload
+      items.first.reload
+      items.second.reload
       expect(tag.deleted_at).not_to eq nil
+      expect(items.first.deleted_at).not_to eq nil
+      expect(items.second.deleted_at).not_to eq nil
     end
   end
 
