@@ -158,3 +158,7 @@ https://github.com/thoughtbot/factory_bot/blob/master/GETTING_STARTED.md#configu
 ```
 bin/rails g migration RenameTagsIdToTagIds
 ```
+
+```
+bin/rails g migration RemoveDefaultValueOfKind
+```

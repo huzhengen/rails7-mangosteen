@@ -27,21 +27,25 @@ resource "Tags" do
   post "/api/v1/tags" do
     parameter :name, "Name", required: true
     parameter :sign, "Sign", required: true
+    parameter :kind, "Kind", required: true, in: ["expenses", "income"]
     with_options :scope => :resources do
       response_field :id, "ID"
       response_field :user_id, "User id"
       response_field :name, "Name"
       response_field :sign, "Sing"
+      response_field :kind, "Kind"
       response_field :deleted_time, "Delete time"
     end
     let(:name) { "x" }
     let(:sign) { "y" }
+    let(:kind) { "expenses" }
     example "Create a tag" do
       do_request
       expect(status).to eq 200
       json = JSON.parse response_body
       expect(json["resource"]["name"]).to eq name
       expect(json["resource"]["sign"]).to eq sign
+      expect(json["resource"]["kind"]).to eq kind
     end
   end
 
