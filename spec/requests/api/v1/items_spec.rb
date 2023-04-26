@@ -23,10 +23,10 @@ RSpec.describe "Items", type: :request do
       user1 = create :user
       tag1 = create :tag, user: user1
       tag2 = create :tag, user: user1
-      item1 = create :item, created_at: "2018-01-02", user: user1
-      item2 = create :item, created_at: "2018-01-02", user: user1
-      item3 = create :item, created_at: "2019-01-01", user: user1
-      get "/api/v1/items?created_after=2018-01-01&created_before=2018-01-03", headers: user1.generate_auth_header
+      item1 = create :item, happen_at: "2018-01-02", user: user1
+      item2 = create :item, happen_at: "2018-01-02", user: user1
+      item3 = create :item, happen_at: "2019-01-01", user: user1
+      get "/api/v1/items?happen_after=2018-01-01&happen_before=2018-01-03", headers: user1.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json["resources"].size).to eq 2
@@ -42,18 +42,18 @@ RSpec.describe "Items", type: :request do
       expect(json["resources"][0]["id"]).to eq item.id
     end
     it "filter by time(boundary conditions 2)" do
-      item1 = create :item, created_at: "2018-01-01"
-      item2 = create :item, created_at: "2017-01-01", user: item1.user
-      get "/api/v1/items?created_after=2018-01-01", headers: item1.user.generate_auth_header
+      item1 = create :item, happen_at: "2018-01-01"
+      item2 = create :item, happen_at: "2017-01-01", user: item1.user
+      get "/api/v1/items?happen_after=2018-01-01", headers: item1.user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json["resources"].size).to eq 1
       expect(json["resources"][0]["id"]).to eq item1.id
     end
     it "filter by time(boundary conditions 3)" do
-      item1 = create :item, created_at: "2018-01-01"
-      item2 = create :item, created_at: "2019-01-01", user: item1.user
-      get "/api/v1/items?created_before=2018-01-02", headers: item1.user.generate_auth_header
+      item1 = create :item, happen_at: "2018-01-01"
+      item2 = create :item, happen_at: "2019-01-01", user: item1.user
+      get "/api/v1/items?happen_before=2018-01-02", headers: item1.user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json["resources"].size).to eq 1
