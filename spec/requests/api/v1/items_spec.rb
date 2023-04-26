@@ -59,6 +59,16 @@ RSpec.describe "Items", type: :request do
       expect(json["resources"].size).to eq 1
       expect(json["resources"][0]["id"]).to eq item1.id
     end
+    it "filter by kind" do
+      item1 = create :item, kind: "expenses", amount: 100
+      item2 = create :item, kind: "income", amount: 200, user: item1.user
+      get "/api/v1/items?kind=expenses", headers: item1.user.generate_auth_header
+      expect(response).to have_http_status 200
+      json = JSON.parse(response.body)
+      expect(json["resources"].size).to eq 1
+      expect(json["resources"][0]["id"]).to eq item1.id
+      expect(json["resources"][0]["amount"]).to eq 100
+    end
   end
 
   describe "Create one item" do
