@@ -25,6 +25,24 @@ class Api::V1::ItemsController < ApplicationController
     end
   end
 
+  def balance
+    current_user_id = request.env["current_user_id"]
+    return head 401 if current_user_id.nil?
+    items = Item.where({ user_id: current_user_id }).where({ happen_at: params[:happen_after]..params[:happen_before] })
+    income_items = []
+    expenses_items = []
+    items.each do |item|
+      if item.kind == "income"
+        income_items << item
+      else
+        expenses_items << item
+      end
+    end
+    income = income_items.sum(&:amount)
+    expenses = expenses_items.sum(&:amount)
+    render json: { income: income, expenses: expenses, balance: income - expenses }
+  end
+
   def summary
     current_user_id = request.env["current_user_id"]
     return head 401 if current_user_id.nil?

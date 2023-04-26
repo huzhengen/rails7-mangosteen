@@ -92,6 +92,26 @@ RSpec.describe "Items", type: :request do
     end
   end
 
+  describe "Get balance" do
+    it "not loggd in" do
+      get "/api/v1/items/balance?happen_after=2018-01-01&happen_before=2019-01-01"
+      expect(response).to have_http_status(401)
+    end
+    it "loggd in and get balance" do
+      user = create :user
+      create :item, user: user, kind: "expenses", amount: 100, happen_at: "2018-03-02"
+      create :item, user: user, kind: "expenses", amount: 200, happen_at: "2018-03-02"
+      create :item, user: user, kind: "income", amount: 100, happen_at: "2018-03-02"
+      create :item, user: user, kind: "income", amount: 200, happen_at: "2018-03-02"
+      get "/api/v1/items/balance?happen_after=2018-03-01&happen_before=2018-03-05", headers: user.generate_auth_header
+      expect(response).to have_http_status 200
+      json = JSON.parse(response.body)
+      expect(json["income"]).to eq 300
+      expect(json["expenses"]).to eq 300
+      expect(json["balance"]).to eq 0
+    end
+  end
+
   describe "Statistics" do
     it "grouped by day/happen_at" do
       user = create :user
