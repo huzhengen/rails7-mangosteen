@@ -37,6 +37,7 @@ RSpec.describe "Tags", type: :request do
       expect(json["resources"].size).to eq 1
     end
   end
+
   describe "create tags" do
     it "not logged in" do
       post "/api/v1/tags", params: { name: "x", sign: "x" }
@@ -44,7 +45,7 @@ RSpec.describe "Tags", type: :request do
     end
     it "create tag" do
       user1 = create :user
-      post "/api/v1/tags", params: { name: "name", sign: "sign" }, headers: user1.generate_auth_header
+      post "/api/v1/tags", params: { name: "name", sign: "sign", kind: "expenses" }, headers: user1.generate_auth_header
       expect(response).to have_http_status(200)
       json = JSON.parse(response.body)
       expect(json["resource"]["name"]).to eq "name"
@@ -52,7 +53,7 @@ RSpec.describe "Tags", type: :request do
     end
     it "need name when creating tag" do
       user1 = create :user
-      post "/api/v1/tags", params: { sign: "sign" }, headers: user1.generate_auth_header
+      post "/api/v1/tags", params: { sign: "sign", kind: "expenses" }, headers: user1.generate_auth_header
       expect(response).to have_http_status(422)
       json = JSON.parse(response.body)
       expect(json["errors"]["name"]).to be_an Array
@@ -60,7 +61,7 @@ RSpec.describe "Tags", type: :request do
     end
     it "need sign when creating tag" do
       user1 = create :user
-      post "/api/v1/tags", params: { name: "name" }, headers: user1.generate_auth_header
+      post "/api/v1/tags", params: { name: "name", kind: "expenses" }, headers: user1.generate_auth_header
       expect(response).to have_http_status(422)
       json = JSON.parse(response.body)
       expect(json["errors"]["sign"]).to be_an Array

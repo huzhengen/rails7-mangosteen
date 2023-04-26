@@ -12,11 +12,12 @@ class Api::V1::TagsController < ApplicationController
   end
 
   def create
-    current_user_id = request.env["current_user_id"]
-    return head 401 if current_user_id.nil? # :unauthorized
-    tag = Tag.new name: params[:name], sign: params[:sign], user_id: current_user_id
+    current_user = User.find request.env["current_user_id"]
+    return head 401 if current_user.nil?
+    tag = Tag.new params.permit(:name, :sign, :kind)
+    tag.user = current_user
     if tag.save
-      render json: { resource: tag }
+      render json: { resource: tag }, status: :ok
     else
       render json: { errors: tag.errors }, status: :unprocessable_entity # 422
     end

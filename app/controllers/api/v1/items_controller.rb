@@ -5,8 +5,8 @@ class Api::V1::ItemsController < ApplicationController
     # items = Item.where("id > ?", params[:start_id]).limit(100)
     items = Item.where({ user_id: current_user_id })
       .where({ happen_at: params[:happen_after]..params[:happen_before] })
-      .where({ kind: params[:kind] })
-      .page(params[:page] || 1)
+    items = items.where({ kind: params[:kind] }) unless params[:kind].nil?
+    items = items.page(params[:page] || 1)
     render json: { resources: items, pager: {
       page: params[:page] || 1,
       per_page: Item.default_per_page,
@@ -18,7 +18,7 @@ class Api::V1::ItemsController < ApplicationController
     current_user_id = request.env["current_user_id"]
     return head 401 if current_user_id.nil? # :unauthorized
     # item = Item.new amount: params[:amount], tag_ids: params[:tag_ids], happen_at: params[:happen_at], user_id: current_user_id
-    item = Item.new params.permit(:amount, :happen_at, tag_ids: [])
+    item = Item.new params.permit(:amount, :happen_at, :kind, tag_ids: [])
     item.user_id = current_user_id
     if item.save
       render json: { resource: item }
