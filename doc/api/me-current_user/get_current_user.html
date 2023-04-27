@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Validation_codes API</title>
+    <title>Me-current user API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,48 +106,28 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>Validation_codes API</h1>
+      <h1>Me-current user API</h1>
 
       <div class="article">
-        <h2>Request Code</h2>
-        <h3>POST /api/v1/validation_codes</h3>
+        <h2>Get current user</h2>
+        <h3>GET /api/v1/me</h3>
 
-          <h3>Parameters</h3>
-          <table class="parameters table table-striped table-bordered table-condensed">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                    <span class="name">email</span>
-                </td>
-                <td>
-                  <span class="description">Email</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
 
 
           <h3>Request</h3>
 
             <h4>Headers</h4>
             <pre class="request headers">Version: HTTP/1.0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMzQsImV4cCI6MTY4MjYwMDQ3OH0.8fiyLy0j_hFEVpeRE4b1qy5fsmLM7CfktifQp9BIrNM
 Accept: application/json
 Content-Type: application/json
 Host: example.org
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/validation_codes</pre>
+          <pre class="request route highlight">GET /api/v1/me</pre>
 
 
-            <h4>Body</h4>
-            <pre class="request body">{"email":"1@gmail.com"}</pre>
 
 
             <h3>Response</h3>
@@ -158,17 +138,25 @@ X-Content-Type-Options: nosniff
 X-Download-Options: noopen
 X-Permitted-Cross-Domain-Policies: none
 Referrer-Policy: strict-origin-when-cross-origin
-Content-Type: text/plain; charset=utf-8
+Content-Type: application/json; charset=utf-8
 Vary: Accept
-ETag: W/&quot;36a9e7f1c95b82ffb99743e0c5c4ce95&quot;
+ETag: W/&quot;f41e9dd6c7d22fca7c46507f207edff7&quot;
 Cache-Control: max-age=0, private, must-revalidate
-X-Request-Id: 3ede967e-1013-4dca-8a76-2fddfa259363
-X-Runtime: 0.046692
-Content-Length: 1</pre>
+X-Request-Id: 1e4f03bb-24b8-44d2-8edc-8bc87b12d67e
+X-Runtime: 0.032606
+Content-Length: 142</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body"> </pre>
+              <pre class="response body">{
+  &quot;resource&quot;: {
+    &quot;id&quot;: 134,
+    &quot;email&quot;: &quot;shannon@crist.co&quot;,
+    &quot;name&quot;: null,
+    &quot;created_at&quot;: &quot;2023-04-27T11:01:18.020Z&quot;,
+    &quot;updated_at&quot;: &quot;2023-04-27T11:01:18.020Z&quot;
+  }
+}</pre>
       </div>
     </div>
   </body>
