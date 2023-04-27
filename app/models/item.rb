@@ -16,4 +16,8 @@ class Item < ApplicationRecord
       self.errors.add :tag_ids, "Tag does not belong to the current user"
     end
   end
+
+  def tags
+    Tag.where(id: tag_ids)
+  end
 end
