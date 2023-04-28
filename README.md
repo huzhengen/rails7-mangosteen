@@ -166,3 +166,9 @@ bin/rails g migration RemoveDefaultValueOfKind
 ```
 bin/rails g migration AddDeleteAtForItems
 ```
+
+```
+psql -U username -d dbname
+\l
+\c dbname
+```
