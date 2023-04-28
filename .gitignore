@@ -34,3 +34,5 @@
 
 /vendor/cache
 /tmp/deploy_cache/*
+
+/doc/api

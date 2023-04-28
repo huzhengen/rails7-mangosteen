@@ -134,6 +134,7 @@ UserMailer.welcome_email("123456", "xxx@xxx.com").deliver
 Git
 ```
 git rm -r --cached dist
+git rm -r --cached doc/api
 git add .
 git commit --amend -m "update"
 ```
