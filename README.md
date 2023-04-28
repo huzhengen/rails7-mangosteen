@@ -173,3 +173,9 @@ psql -U username -d dbname
 \l
 \c dbname
 ```
+
+deploy
+```
+bin/pack_for_remote.sh
+need_migrate=1 bin/pack_for_remote.sh
+```
