@@ -1,5 +1,7 @@
 # Rails7-mangosteen
 
+> 部署的时候，要先修改 bin/pack_for_remote.sh 里的 ip，确定是自己服务器的 IP
+
 Create the project
 ```
 gem sources --add https://gems.ruby-china.com/ --remove https://rubygems.org/

@@ -10,7 +10,6 @@ resource "Me-current user" do
       do_request
       expect(status).to eq 200
       json = JSON.parse response_body
-      p json
       expect(json["resource"]["id"]).to eq current_user.id
     end
   end

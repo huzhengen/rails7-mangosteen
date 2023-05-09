@@ -1,6 +1,6 @@
 # Is production.key correct?
 user=mangosteen
-ip=122.56.84.68
+ip=11.11.11.11
 
 time=$(date +'%Y%m%d-%H%M%S')
 cache_dir=tmp/deploy_cache
