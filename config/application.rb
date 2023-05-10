@@ -37,6 +37,7 @@ module Rails7Mangosteen
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
     config.middleware.use AutoJwt
-    # config.i18n.default_locale = "zh-CN"
+    config.i18n.default_locale = "zh-CN"
+    config.time_zone = "Beijing"
   end
 end

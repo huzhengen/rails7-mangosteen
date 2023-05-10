@@ -20,8 +20,8 @@ RSpec.describe "Sessions", type: :request do
       post "/api/v1/session", params: {}
       expect(response).to have_http_status(422)
       json = JSON.parse response.body
-      expect(json["errors"]["email"][0]).to eq "required"
-      expect(json["errors"]["code"][0]).to eq "required"
+      expect(json["errors"]["email"][0]).to eq "必填"
+      expect(json["errors"]["code"][0]).to eq "必填"
     end
   end
 end
