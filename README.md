@@ -2,6 +2,23 @@
 
 > 部署的时候，要先修改 bin/pack_for_remote.sh 里的 ip，确定是自己服务器的 IP
 
+第一次 clone 下来项目，要注意首先需要：
+
+```
+rvm use ruby-3.0.0
+EDITOR="code --wait" rails credentials:edit
+```
+
+填进去信息，不然会有报错
+
+在部署的时候需要：
+
+```
+EDITOR="code --wait" rails credentials:edit --environment production
+```
+
+部署的时候还需要注意，填几个 key
+
 Create the project
 ```
 gem sources --add https://gems.ruby-china.com/ --remove https://rubygems.org/
