@@ -56,14 +56,14 @@ resource "Items" do
   end
 
   get "/api/v1/items/summary" do
-    parameter :happened_after, "Start time", required: true
-    parameter :happened_before, "End time", required: true
+    parameter :happen_after, "Start time", required: true
+    parameter :happen_before, "End time", required: true
     parameter :kind, "Kind", enum: ["expenses", "income"], required: true
     parameter :group_by, "happen_at", enum: ["happen_at", "tag_id"], required: true
     response_field :groups, "Group"
     response_field :total, "Total"
-    let(:happened_after) { "2018-01-01" }
-    let(:happened_before) { "2019-01-01" }
+    let(:happen_after) { "2018-01-01" }
+    let(:happen_before) { "2019-01-01" }
     let(:kind) { "expenses" }
     example "Get items summary by happen_at" do
       tag = create :tag, user: current_user

@@ -125,7 +125,7 @@ RSpec.describe "Items", type: :request do
   end
 
   describe "Statistics" do
-    it "grouped by day/happen_at" do
+    it "grouped by day/happen_at(incorrect)" do
       user = create :user
       create :item, happen_at: "2018-06-18T00:00:00+08:00", amount: 100, user: user
       create :item, happen_at: "2018-06-18T00:00:00+08:00", amount: 200, user: user
@@ -134,7 +134,23 @@ RSpec.describe "Items", type: :request do
       create :item, happen_at: "2018-06-19T00:00:00+08:00", amount: 100, user: user
       create :item, happen_at: "2018-06-19T00:00:00+08:00", amount: 200, user: user
       get "/api/v1/items/summary", params: {
-                                     happened_after: "2018-01-01", happened_before: "2019-01-01",
+                                     happen_after: "2019-01-01", happen_before: "2020-01-01",
+                                     kind: "expenses", group_by: "happen_at",
+                                   }, headers: user.generate_auth_header
+      expect(response).to have_http_status 200
+      json = JSON.parse response.body
+      expect(json["groups"].size).to eq 0
+    end
+    it "grouped by day/happen_at(correct)" do
+      user = create :user
+      create :item, happen_at: "2018-06-18T00:00:00+08:00", amount: 100, user: user
+      create :item, happen_at: "2018-06-18T00:00:00+08:00", amount: 200, user: user
+      create :item, happen_at: "2018-06-20T00:00:00+08:00", amount: 100, user: user
+      create :item, happen_at: "2018-06-20T00:00:00+08:00", amount: 200, user: user
+      create :item, happen_at: "2018-06-19T00:00:00+08:00", amount: 100, user: user
+      create :item, happen_at: "2018-06-19T00:00:00+08:00", amount: 200, user: user
+      get "/api/v1/items/summary", params: {
+                                     happen_after: "2018-01-01", happen_before: "2019-01-01",
                                      kind: "expenses", group_by: "happen_at",
                                    }, headers: user.generate_auth_header
       expect(response).to have_http_status 200
@@ -157,7 +173,7 @@ RSpec.describe "Items", type: :request do
       create :item, amount: 200, tag_ids: [tag2.id, tag3.id], happen_at: "2018-06-18T00:00:00+08:00", user: user
       create :item, amount: 300, tag_ids: [tag3.id, tag1.id], happen_at: "2018-06-18T00:00:00+08:00", user: user
       get "/api/v1/items/summary", params: {
-                                     happened_after: "2018-01-01", happened_before: "2019-01-01",
+                                     happen_after: "2018-01-01", happen_before: "2019-01-01",
                                      kind: "expenses", group_by: "tag_id",
                                    }, headers: user.generate_auth_header
       expect(response).to have_http_status 200
